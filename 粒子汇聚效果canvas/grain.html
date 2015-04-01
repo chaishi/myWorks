@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>grain.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  </head>
+  
+  <body>
+  	 <input type=button value="start" id="start"><br>
+    <canvas id="grain_canvas">您的浏览器不支持canvas</canvas>
+    <script>
+    	window.onload = function(){
+			var global = {
+					cvs:null,
+					ctx:null,
+					imgData:null, //获取open
+					num:0,
+					timer:null,
+					goalPos:[],
+					particals:[] 
+			};
+			init();
+			function init(){
+				global.cvs = document.getElementById("grain_canvas");
+				if(global.cvs == null)
+					return false;
+				global.cvs.width = 700;
+				global.cvs.height = 130;
+				global.cvs.style.background = "#000";
+				global.ctx = global.cvs.getContext('2d');
+				document.getElementById("start").onclick = function(){
+					global.num = 0;
+					drawLetters();
+					loop();
+				};
+			}
+			
+			//画出字母
+			function drawLetters(){
+				var cvs = document.createElement('canvas');
+				var ctx = cvs.getContext('2d');
+				cvs.style.background = "yellow";
+				cvs.width = 800;
+				cvs.height = 40;
+				ctx.font = "20px verdana";
+				ctx.fillStyle = "red";
+				ctx.fillText("OPEN WEBLAB",0,25);
+				//document.body.appendChild(cvs);
+				global.imgData = ctx.getImageData(0,0,cvs.width,cvs.height);
+				var _img = global.imgData.data;
+				for(var i = 0, n = _img.length; i < n; i += 8){
+					if(_img[i + 0] != 0 || _img[i + 1] != 0 || _img[i + 2] != 0){
+						var _pos = {
+							x:(i % cvs.width),
+							y:((i / cvs.width) )|0 
+						} ;
+						global.goalPos.push(_pos);
+					}
+				}
+			}
+			
+			function loop(){
+				global.ctx.clearRect(0,0,global.cvs.width,global.cvs.height);
+				var partical = new Particle(Math.random() * global.cvs.width, Math.random() * global.cvs.height);
+				global.particals.push(partical);
+				for(var i = 0, len = global.particals.length; i < len; i++){
+					if(global.particals[i].xPos != global.goalPos[ global.particals[i].index ].x
+					|| global.particals[i].yPos != global.goalPos[ global.particals[i].index ].y)
+						global.particals[i].setPos();
+					global.particals[i].draw();	
+				}
+				if (global.particals.length > 1500){
+					delete global.particals[0];
+					global.particals.shift();
+			    }
+			    
+			    global.num++;
+				global.timer = setTimeout(function(){loop();},10);
+				
+				if(global.num >= 1400){
+					clearTimeout(global.timer);
+					global.ctx.clearRect(0,0,global.cvs.width,global.cvs.height);
+					for(var i = 0, len = global.goalPos.length; i < len; i++){
+						var partical = new Particle(global.goalPos[i].x, global.goalPos[i].y);
+						partical.draw();
+					}
+				}
+			}
+			//粒子类
+			 function Particle (xPos, yPos) {  
+				 this.xPos = xPos;
+				 this.yPos = yPos;
+				 this.index = Math.round( Math.random() * global.goalPos.length * 1000) % global.goalPos.length;
+				 //画出粒子
+				 this.draw = function(){
+					 global.ctx.fillStyle = "white";
+					 global.ctx.beginPath();
+					 global.ctx.arc(this.xPos, this.yPos , 2, 0, Math.PI*2, true);
+					 global.ctx.fill();
+				 };
+				 //设置粒子坐标
+				 this.setPos = function(){
+					 var x = global.goalPos[this.index].x, y = global.goalPos[this.index].y;
+					 if (x > this.xPos)this.xPos += 2;
+					 else this.xPos -= 2;
+					 this.yPos = ((y - yPos) * this.xPos + ((x * yPos) - (y * xPos))) / (x - xPos);
+				 };
+			  }
+		};
+    </script>
+  </body>
+</html>

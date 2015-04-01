@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>游戏运行中</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  	<style>
+  		body{
+    		background-color: #222;
+    	}
+    	div[id=gameIngContent]{
+    		position:absolute;
+    		width:310px;
+    		height:500px;
+    		left:50%;
+    		top:50%;
+    		margin-left:-155px;
+    		margin-top:-250px;
+    	}
+    	div[class=gate]{
+    		color:white;
+    		font-size: 20px;
+    		font-family: 幼圆;
+    		font-weight: bold;
+    	}
+    	div[class=logo]{
+	  		width:100%;
+	  		text-align: center;
+	  	}
+	  	div[class=logo] img{
+	  		width:50px;
+	  	}
+  	</style>
+  </head>
+  
+  <body>
+    <div id="gameIngContent">
+    <br><br>
+  		<div class="gate"> &nbsp;&nbsp;关卡：<span id="gate">1</span>&nbsp;&nbsp;&nbsp;<span> 生命值: <span id="life">3</span></span></div><br><br><br><br>
+  		<div class="cupsContent"><canvas id="cvs1" width="320px" height = "280px"></canvas></div>
+  		<div class="logo"><img id="start" src="images/before/logo.png"></img></div>
+  	</div>
+  	<script type="text/javascript" src="js/gameRun.js"></script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>游戏前</title>
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  </head>
+  <style>
+  	body{
+  		background-color: #222;
+  	}
+  	#beforeContent{
+  		position:relative;
+  	}
+  	div[class=center]{
+  		position:absolute;
+  		width:300px;
+  		height:450px;
+  		top:50%;
+  		left:50%;
+  		margin-left:-150px;
+  		text-align: center;
+  	}
+  	div[class=gameIntroduce]{
+  		color:white;
+  		font-family:幼圆;
+  	}
+  	div[class=logo] img{
+  		width:50px;
+  	}
+  	div[class=gameName] img{
+  		width:150px;
+  	}
+  	div[class=cup] img{
+  		width:250px;
+  	}
+  	div[id=Gamestart] img{
+  		width:220px;
+  	}
+  </style>
+  <body>
+  	<div id="beforeContent">
+  		<div class="center">
+	  		<div class="logo"><img src="images/before/logo.png"></img></div><br>
+		  	<div class="gameName"><img src="images/before/theBestEyes.png"></img></div><br><br><br>
+		  	<div class="cup"><img src="images/before/cupWithShadow.png"></img></div>
+		    <div class="gameIntroduce">找到杯子中的金币，<br>每玩过1关即可获取1个积分。</div><br><br><br>
+		    <div id="Gamestart"><img src="images/before/gameStart.png"></img></div>
+		</div>
+  	</div>
+  	<script>
+  		window.onload = function(){
+  			document.getElementById("Gamestart").onclick = function(){
+  				location.href="gameRun.html";
+  			};
+  		};
+  	</script>
+  </body>
+</html>
