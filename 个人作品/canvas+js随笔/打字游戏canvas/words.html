@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>words.html</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+    <style>
+    	body{
+			background-color: #333;
+		}
+		div{
+			color:white;
+		}
+		#content{
+			position: absolute;
+		}
+		.game{
+			position:absolute;
+			left:0;
+			top：0;
+		}
+		#start{
+			background-color: white;
+			border:0;
+			font-size:25px;
+			width:80px;
+			height:30px;
+		}
+    </style>
+  </head>
+  <body>
+    <div id="content">
+    	<div class="game"> 
+    		<input id="start" type=button value="开始">
+	    	<span>分数：</span><span id="score"></span> 
+	    	<span>生命：</span><span id="lives"></span>
+    	</div>
+    	<canvas id="wordCanvas"></canvas>
+    	<script>
+    		window.onload = function(){
+				var global = {
+					cvs:null,
+					ctx:null,
+					score:0,
+					lives:5,
+					appearTime:1000,
+					moveTime:10,
+					flagRun:false,
+					letters:"abcdrfghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+					letterArr:[]//letter,point.x,point.y
+				};
+				
+				document.getElementById("start").onclick = function(){
+					if(!global.flagRun){
+						global.flagRun = true;
+						startGame();
+					}else{
+						alert("游戏正在进行！");
+					}
+				};
+				
+				//当输入键盘内容时
+				document.onkeypress = function(e){
+					var e = window.event ? window.event : e;
+					for(var i = 0,len = global.letterArr.length; i < len; i++){
+						if( String.fromCharCode (e.charCode) == global.letterArr[i].letter){
+							global.letterArr.splice(i,1);
+							global.score++;
+							document.getElementById("score").innerHTML = global.score;
+							
+							if(global.score % 10 == 0 && global.appearTime > 10){
+								global.appearTime -= 40;
+							}else if(global.score % 20 == 0 && global.moveTime > 0 ){
+								global.moveTime--;
+							}
+							break;
+						}
+					}
+				};
+				
+				function init(){
+					global.cvs = document.getElementById("wordCanvas");
+					global.ctx = global.cvs.getContext('2d');
+					global.cvs.width = window.innerWidth - 50;
+					global.cvs.height = window.innerHeight - 30;
+					global.ctx.font = "Bold 25px verdana";
+					global.ctx.shadowColor = "#00b0f0";
+					global.ctx.shadowBlur = 15;
+					global.ctx.fillStyle = "#fff";
+					document.getElementById("score").innerHTML = global.score;
+					document.getElementById("lives").innerHTML = global.lives;
+					drawText();
+				}
+				
+				function startGame(){
+					init();
+					getLetter();
+					moveDown(1);
+				}
+				
+				//获取单词
+				function getLetter(){
+					var le = {
+							letter:global.letters[ Math.round(Math.random()*104) % 52 ],
+							point:{
+								x:Math.round(Math.random()*40) % 30 * ((window.innerWidth - 50 )/30),
+								y:0
+							}
+					};
+					global.letterArr.push(le);
+					if(global.flagRun){
+						setTimeout(function(){
+							getLetter();
+						},global.appearTime);
+					}
+				}
+						
+				//单词向下移动
+				function moveDown(speed){
+					for(var i = 0,len = global.letterArr.length; i < len; i++){
+						global.letterArr[i].point.y += speed;
+						if(global.letterArr[i].point.y >= window.innerHeight - 30){
+							global.lives--;
+							document.getElementById("lives").innerHTML = global.lives;
+							delete global.letterArr[i];
+							if(global.lives <= 0){
+								alert("Game Over!");
+								global.flagRun = false;
+							}
+						}
+					}
+					global.letterArr = compressArr(global.letterArr);
+					drawText();
+					if(global.flagRun){
+						setTimeout(function(){
+							moveDown(1);
+						},global.moveTime);
+					}
+				}
+				
+				//画出单词
+				function drawText(){
+					global.ctx.clearRect(0,0,global.cvs.width,global.cvs.height);
+					for(var i = 0, len = global.letterArr.length; i < len; i++){
+						global.ctx.fillText(global.letterArr[i].letter , global.letterArr[i].point.x , global.letterArr[i].point.y);
+					}
+				}
+				
+				//压缩数组
+				function compressArr(arr){
+					return arr.filter(function(x){return x != undefined && x != null;});
+				}
+			};
+    	</script>
+    </div>
+  </body>
+</html>
