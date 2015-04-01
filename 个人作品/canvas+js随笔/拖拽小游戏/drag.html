@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>js实现拖拽</title>
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <style>
+    	body
+		{
+			-moz-user-select: none;
+		　　-webkit-user-select: none;
+		　　-ms-user-select: none;
+		　　-khtml-user-select: none;
+		　　user-select: none;
+		}
+    	.title{
+    		width:100%;
+    		text-align: center;
+    		margin-top:20px;
+    		font-size: 30px;
+    		letter-spacing: 5px;
+    		font-weight: bold;
+    	}
+    	div[id^=dragDiv]{
+    		width:100px;
+    		height:100px;
+    		position:absolute;
+    	}
+    	#dragDiv0{
+    		background-color: black;left:500px;top:150px;
+    	}
+    	#dragDiv1{
+    		background-color: red;left:610px;top:150px;
+    	}
+    	#dragDiv2{
+    		background-color: blue;left:720px;top:150px;
+    	}
+    	
+    	#color{
+    		width:600px;
+    		height:100px;
+    		padding:5px;
+    		font-size: 25px;
+    		line-height:100px;
+    		color:orange;
+    		font-weight:bold;
+    		border:10px solid #555;
+    		position:relative;
+    		left:350px;
+    		top:250px;
+    		overflow:hidden;
+    	}
+    	#incolor{
+    		position:relative;
+    		width:700px;
+    	}
+    	#incolor div{
+    		width:100px;
+    		height:100px;
+    		float:left;
+    		text-align:center;
+    		border:1px dashed #333;
+    		box-sizing:border-box;
+    	}
+    	#start{
+    		position:absolute;
+    		left:550px;
+    		top:500px;
+    	}
+    	#runGame{
+    		width:200px;
+    		height:80px;
+    		color:white;
+    		font-size:40px;
+    		line-height:80px;
+    		background-color: #333;
+    	}
+    	.score{
+    		position:absolute;
+    		top:100px;
+    		color:red;
+    		font-size: 25px;
+    		font-weight: bold;
+    	}
+    </style>
+  </head>
+  <body>
+  	<!-- <embed src="images/music.mp3" hidden="true" autostart="true" loop="true"> -->
+  	<div class="title">对号入座</div>
+  	<div class="score"><span>请使用</span><br>得分：<span id="score">0</span></div>
+  	<div id="drag">
+		<div id="dragDiv0"></div>
+	   	<div id="dragDiv1"></div>
+	   	<div id="dragDiv2"></div>  	
+  	</div>
+   	
+   	<div id="color">
+   		<div id="incolor"></div>
+   	</div>
+   	<br>
+   	<div id="start"> <input type=button value = "开始游戏" id="runGame"> </div>
+    <script>
+		/*禁止页面进行文字复制*/
+		window.onload = function(){
+			/**
+			 * 全局变量
+			 */
+			var g = {
+				color:["红","黑","蓝"],
+				incolor:null,
+				timer:null,
+				score:0,
+				div: []
+			};
+			
+			/**
+			 * @stone
+			 * 不停地出现不同的颜色文字
+			 */
+			function initColor(){
+				clearTimeout(g.timer);	
+				left = 400;	
+				g.incolor = document.getElementById("incolor");
+				for(var j = 0,n = g.div.length; j < n; j++){
+					g.incolor.removeChild(g.div[j]);
+				}
+				g.div.length = 0;
+				g.score = 0;
+				document.getElementById("score").innerHTML = 0;
+				for(var i = 0; i < 7; i++){
+					createNewDiv();
+				}
+				initDrag();
+			}
+			document.getElementById("runGame").onclick = function(){
+				initColor();
+				moveLeft(incolor);
+			};
+			
+			function createNewDiv(){
+				var div = document.createElement("div");
+				div.className = "col";
+				var colorIndex = Math.random() * 10 % 3 | 0;
+				div.innerHTML = g.color[colorIndex];
+				div.color = g.color[colorIndex];
+				g.div.push(div);
+				g.incolor.appendChild(g.div[g.div.length - 1]);
+			}
+			
+			function deleteDiv(){
+				g.incolor.removeChild(g.div[0]);
+				if(!g.div[0].vis){
+					clearTimeout(g.timer);
+					alert("你终于Over了! 最终得分：" + g.score);
+				}
+				g.div.shift();
+			}
+			
+			var left = 400;
+			function moveLeft(obj){
+				left--;
+				incolor.style.left = left + "px";
+				g.timer = setTimeout(function(){moveLeft(obj);},7);
+				if(left == -100){
+					deleteDiv();
+					left+=99;
+					createNewDiv();
+				}
+			}
+			
+			/**
+			 * @stone
+			 * 拖拽到对应框框
+			 */
+			function initDrag(){
+				var dr = [];
+				dr[0] = document.getElementById("dragDiv0");
+				dr[0].color = "黑";
+				draging(dr[0]);
+				dr[1] = document.getElementById("dragDiv1");
+				dr[1].color = "红";
+				draging(dr[1]);
+				dr[2] = document.getElementById("dragDiv2");
+				dr[2].color = "蓝";
+				draging(dr[2]);
+			}
+			
+			function draging(drag){
+				drag.onmousedown = function(ev){
+					ev = ev || window.event;
+					var docu = document;
+					var position = {x:0,y:0};
+					position.x = ev.clientX - drag.offsetLeft;
+					position.y = ev.clientY - drag.offsetTop;
+					docu.onmousemove = function(ev){
+						ev = ev || window.event;
+						var x = ev.clientX - position.x;
+						var y = ev.clientY - position.y;
+						drag.style.left = x + "px";
+						drag.style.top = y + "px";
+					};
+					
+					docu.onmouseup = function(ev){
+						docu.onmousemove = null;
+						docu.onmouseup = null;
+						ev = ev || window.event;
+						var x = ev.clientX - position.x;
+						var y = ev.clientY - position.y;
+						var sl = 373,st = 293;
+						for(var j = 0, len = g.div.length;j < len; j++){
+							if(!g.div[j].vis){
+								sl += j * 100 + left;
+								if(pointInRect({x:x + 50,y : y + 50},{sx:g.div[0].offsetLeft + sl, sy:g.div[0].offsetTop + st, wid:100})
+								&& g.div[j].color == drag.color
+								){
+									fillBack(j,drag.color,drag,1);
+									g.div[j].vis = 1;
+									g.score++;
+									document.getElementById("score").innerHTML = g.score;
+									break;
+								}else{
+									fillBack(j,drag.color,drag,0);break;
+								}
+							}
+						}
+					};
+				};
+			}
+			
+			
+			function fillBack(j,color,drag,fla){
+				switch(color){
+				case "黑":{
+					if(fla)g.div[j].style.background = "black";
+					drag.style.left = 500 + "px";
+					drag.style.top = 150 + "px";
+				}break;
+				case "红":{
+					if(fla)g.div[j].style.background = "red";
+					drag.style.left = 610 + "px";
+					drag.style.top = 150 + "px";
+				}break;
+				case "蓝":{
+					if(fla)g.div[j].style.background = "blue";
+					drag.style.left = 720 + "px";
+					drag.style.top = 150 + "px";
+				}break;
+				}
+			}
+			
+			/**
+			 * @stone
+			 * 多用函数
+			 */
+			//判断一个点是否在矩形区域内
+			function pointInRect(point,rect){
+				console.log(point,rect);
+				if((point.x > rect.sx && point.x < rect.sx + rect.wid)
+				&& (point.y > rect.sy && point.y < rect.sy + rect.wid)
+				){
+					return true;
+				}
+				return false;
+			}
+			
+			//禁止复制页面内容
+			document.oncontextmenu=function(evt){ 
+				evt.preventDefault(); 
+			}; 
+		
+			document.onselectstart=function(evt){ 
+				evt.preventDefault(); 
+			}; 
+		};
+	</script> 
+  </body>
+</html>
