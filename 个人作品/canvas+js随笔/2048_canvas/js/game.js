@@ -32,12 +32,12 @@ var gl = {
 			gl.cvs.height = window.innerHeight * 0.8;
 			gl.cvs.width = gl.cvs.height;
 		}
-		if(gl.cvs.width < 200){
-			gl.cvs.width = 200;
-			gl.cvs.height = 200;
-		}else if(gl.cvs.width > 500){
-			gl.cvs.width = 500;
-			gl.cvs.height = 500;
+		if(gl.cvs.width < 250){
+			gl.cvs.width = 250;
+			gl.cvs.height = 250;
+		}else if(gl.cvs.width > 400){
+			gl.cvs.width = 400;
+			gl.cvs.height = 400;
 		}
 	}
 	
@@ -61,9 +61,9 @@ var gl = {
 		var back = new Background();
 		back.draw(gl.ctx,gl.cvs);
 		searchRect(der);		
-		if(checkQueue()){
-			reDrawMap();
+		if(checkQueue()){			
 			if(!gameWin()){
+				reDrawMap();
 				getNewData(1);
 			}
 		}else{

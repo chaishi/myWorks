@@ -68,11 +68,12 @@ function reDrawMap(){
 			gl.map[m][p].flag = false;		
 			if(gl.map[m][p].value > 0){			
 				gl.map[m][p].Img = new Img({x:m,y:p},gl.map[m][p].value);
-				gl.map[m][p].Img.img.position = {x:m,y:p};
+				gl.map[m][p].Img.drawByPos(gl.ctx,gl.stdWidth, gl.stdHeight);
+				/*gl.map[m][p].Img.img.position = {x:m,y:p};
 				gl.map[m][p].Img.img.onload = function(){
 					var x = this.position.x,y = this.position.y;
 					gl.map[x][y].Img.drawByPos(gl.ctx,gl.stdWidth, gl.stdHeight);
-				};		
+				};		*/
 			}else{
 				if(gl.map[m][p].Img){
 					delete gl.map[m][p].Img;

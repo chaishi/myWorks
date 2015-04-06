@@ -34,7 +34,7 @@ var Img = (function(){
 		var me = this,
 			x = me.sPosition.x * width + 15,
 			y = me.sPosition.y * height + 15;	
-		me.step+=20;
+		me.step += 15;
 		switch(der){
 		case 37:{//向左,x减小		
 			x = x - me.step;
