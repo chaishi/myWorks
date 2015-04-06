@@ -2,8 +2,6 @@
 var Img = (function(){
 	function obj(position,value){
 		var me = this;
-		me.colors = ["#EEE4DA","#EFE0CB","#F3B079","#F59565","#F75E3E","#FF6600","#EDCE71","#EDCD60","#FFCC33","#FF6633","#FFFF00"];
-		me.txtColors = ["#666","#666","#fff","#fff","#fff","#fff","#fff","#fff","#fff","#fff","#fff"];
 		me.sPosition = position; //图片开始的位置
 		me.ePosition = {x:null,y:null};//图片移动的目标位置
 		me.step = 0;
@@ -17,24 +15,15 @@ var Img = (function(){
 		var me = this;
 		var x = me.sPosition.x * width + 15, 
 			y = me.sPosition.y *height + 15;
-		ctx.fillStyle = me.colors[me.value];
-		ctx.fillRect(x, y , width - 10 ,height - 10);
-		me.drawText(ctx, width, height, x, y);
+		ctx.drawImage(me.img, x, y, width - 10 ,height - 10);
 	};
-	obj.prototype.drawText = function(ctx,width,height,x,y){
-		var me = this;
-		ctx.fillStyle = me.txtColors[me.value];
-		ctx.font = width * 0.3 + "px sans-serif";
-		ctx.textAlign = "center";
-		ctx.textBaseline = "middle";
-		ctx.fillText(Math.pow(2,me.value),x + width * 0.4, y + height * 0.4 );
-	};
+
 	//改变图片位置
 	obj.prototype.move = function(ctx,width,height,der){
 		var me = this,
 			x = me.sPosition.x * width + 15,
 			y = me.sPosition.y * height + 15;	
-		me.step += 15;
+		me.step += 20;
 		switch(der){
 		case 37:{//向左,x减小		
 			x = x - me.step;
@@ -73,9 +62,7 @@ var Img = (function(){
 			}				
 		}break;
 		}
-		ctx.fillStyle = me.colors[me.value];
-		ctx.fillRect( x, y, width - 10 ,height - 10);
-		me.drawText(ctx, width, height, x, y);
+		ctx.drawImage(me.img,x, y , width - 10 ,height - 10);
 	};
 	return obj;
 })();
