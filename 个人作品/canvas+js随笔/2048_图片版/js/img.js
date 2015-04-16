@@ -1,14 +1,35 @@
+/*function Dog(){
+	this.name = "dog";
+	this.age = 23;
+}
+*/
+var Dog = (function(){
+	function obj(pra,bools){
+		var me = this;
+		me.name = pra.name;
+		me.age = pra.age;
+		me.bools = bools;
+	}
+	obj.prototype.sayname = function(){
+		console.log(this.name);
+	};
+	return obj;
+})();
 //图片对象
 var Img = (function(){
 	function obj(position,value){
 		var me = this;
+		if(position.x > 3)
+			position.x = 3;
+		if(position.y > 3)
+			position.y = 3;
 		me.sPosition = position; //图片开始的位置
 		me.ePosition = {x:null,y:null};//图片移动的目标位置
 		me.step = 0;
 		me.arrived = false;//false表示需要移动，true表示不需要再移动
 		me.value = value;
 		me.img = new Image();
-		me.img.src = "images/" + me.value + ".png";
+		me.img.src = "/2048_imgVersion/images/" + me.value + ".png";
 	}
 	//按坐标绘制图片,参数：ctx为canvas上下文; width:图片宽度，height:图片高度
 	obj.prototype.drawByPos = function(ctx,width,height){
