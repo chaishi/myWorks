@@ -35,7 +35,7 @@ var Img = (function(){
 	obj.prototype.drawByPos = function(ctx,width,height){
 		var me = this;
 		var x = me.sPosition.x * width + 15, 
-			y = me.sPosition.y *height + 15;
+			y = me.sPosition.y * height + 15;
 		ctx.drawImage(me.img, x, y, width - 10 ,height - 10);
 	};
 
@@ -48,7 +48,7 @@ var Img = (function(){
 		switch(der){
 		case 37:{//向左,x减小		
 			x = x - me.step;
-			if(x <= me.ePosition.x * width + 15){
+			if(x <= me.ePosition.x * width + 15 && me.ePosition.x != null){
 				x = me.ePosition.x * width + 15;
 				me.sPosition.x = 0;
 				me.step = 0;
@@ -57,7 +57,7 @@ var Img = (function(){
 		}break;
 		case 38:{//向上,y减小		
 			y = y - me.step;
-			if(y <= me.ePosition.y * height + 15){
+			if(y <= me.ePosition.y * height + 15 && me.ePosition.x != null){
 				y = me.ePosition.y * height + 15;
 				me.sPosition.y = 0;
 				me.step = 0;
@@ -66,7 +66,7 @@ var Img = (function(){
 		}break;
 		case 39:{//向右,x增加		
 			x = x + me.step;
-			if(x >= me.ePosition.x * width + 15){
+			if(x >= me.ePosition.x * width + 15 && me.ePosition.x != null){
 				x = me.ePosition.x * width + 15;
 				me.sPosition.x = me.ePosition.x;
 				me.step = 0;
@@ -75,7 +75,7 @@ var Img = (function(){
 		}break;
 		case 40:{//向下,y增加		
 			y = y + me.step;
-			if(y >= me.ePosition.y * height + 15){
+			if(y >= me.ePosition.y * height + 15 && me.ePosition.x != null){
 				y = me.ePosition.y * height + 15;
 				me.sPosition.y = me.ePosition.y;
 				me.step = 0;
@@ -84,6 +84,7 @@ var Img = (function(){
 		}break;
 		}
 		ctx.drawImage(me.img,x, y , width - 10 ,height - 10);
+		return {posX:x,posY:y};
 	};
 	return obj;
 })();
