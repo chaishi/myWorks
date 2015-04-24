@@ -1,20 +1,3 @@
-/*function Dog(){
-	this.name = "dog";
-	this.age = 23;
-}
-*/
-var Dog = (function(){
-	function obj(pra,bools){
-		var me = this;
-		me.name = pra.name;
-		me.age = pra.age;
-		me.bools = bools;
-	}
-	obj.prototype.sayname = function(){
-		console.log(this.name);
-	};
-	return obj;
-})();
 //图片对象
 var Img = (function(){
 	function obj(position,value){

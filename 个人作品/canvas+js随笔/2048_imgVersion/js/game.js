@@ -28,7 +28,6 @@ var game = {
 			var e = event || window.event;
 			game.derection(e.keyCode);
 		};
-		
 		document.addEventListener("touchstart",game.touchstart,false);
 	},
 	gameover:function(){
@@ -79,7 +78,6 @@ var game = {
 	derection:function(der){
 		if(!handle.checkQueue()) //一次滑动完成之前不能继续滑动
 			return;
-		/*game.gameover();//判断游戏是否结束*/
 		var flagMove = false;
 		switch(der){
 			case 37:flagMove = handle.searchMapLeft(1);break;
