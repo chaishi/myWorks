@@ -94,7 +94,7 @@ var game = {
 	},
 	slide:function(der){
 		gl.ctx.clearRect(0,0,gl.cvs.width,gl.cvs.height);
-		var back = new Background();
+		var back = Background.getInstance();
 		back.draw(gl.ctx,gl.cvs);
 		handle.searchRect(der);		
 		if(handle.checkQueue()){			

@@ -1,19 +1,19 @@
 var handle = {
+	//创建新图片，位置任意（成功移动之后）
 	getNewData:function(value){
 		var xx = (Math.random() * 40 | 0 ) % 4;
 		var yy = (Math.random() * 40 | 0 ) % 4;
-		if(!gl.map[xx][yy].Img){
-			gl.map[xx][yy].value = value;
-			gl.map[xx][yy].Img = new Img({x:xx,y:yy},value);	
-			gl.map[xx][yy].Img.img.onload = function(){
-				gl.map[xx][yy].Img.drawByPos(gl.ctx,gl.stdWidth, gl.stdHeight);
-			}	
+		var _map = gl.map[xx][yy];
+		if(!_map.Img){
+			_map.value = value;
+			_map.Img = new Img({x:xx,y:yy},value);	
+			_map.Img.img.onload = function(){_map.Img.drawByPos();};
 		}else{
 			handle.getNewData(value);
 		}
 	},
 	drawBack:function(){
-		var back = new Background();
+		var back = Background.getInstance();
 		back.draw(gl.ctx,gl.cvs);
 	},
 	initMap:function(){
@@ -38,7 +38,7 @@ var handle = {
 		for(var i = 0; i < 4; i++){
 			for(var j = 0; j < 4; j++){
 				if(gl.map[i][j].Img){
-					gl.map[i][j].Img.move(gl.ctx,gl.stdWidth, gl.stdHeight,der);
+					gl.map[i][j].Img.move(der);
 					gl.queue.push(gl.map[i][j].Img);
 				}
 			}

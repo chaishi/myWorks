@@ -1,11 +1,7 @@
-//图片对象
+//图片
 var Img = (function(){
 	function obj(position,value){
 		var me = this;
-		if(position.x > 3)
-			position.x = 3;
-		if(position.y > 3)
-			position.y = 3;
 		me.sPosition = position; //图片开始的位置
 		me.ePosition = {x:null,y:null};//图片移动的目标位置
 		me.step = 0;
@@ -14,17 +10,23 @@ var Img = (function(){
 		me.img = new Image();
 		me.img.src = "/2048_imgVersion/images/" + me.value + ".png";
 	}
-	//按坐标绘制图片,参数：ctx为canvas上下文; width:图片宽度，height:图片高度
-	obj.prototype.drawByPos = function(ctx,width,height){
-		var me = this;
+	//按坐标绘制图片
+	obj.prototype.drawByPos = function(){
+		var me = this,
+			ctx = gl.ctx,
+			width = gl.stdWidth,
+			height = gl.stdHeight;
 		var x = me.sPosition.x * width + 15, 
 			y = me.sPosition.y * height + 15;
 		ctx.drawImage(me.img, x, y, width - 10 ,height - 10);
 	};
 
 	//改变图片位置
-	obj.prototype.move = function(ctx,width,height,der){
+	obj.prototype.move = function(der){
 		var me = this,
+			ctx = gl.ctx,
+			width = gl.stdWidth,
+			height = gl.stdHeight,
 			x = me.sPosition.x * width + 15,
 			y = me.sPosition.y * height + 15;	
 		me.step += 20;
@@ -73,7 +75,7 @@ var Img = (function(){
 })();
 
 
-//背景对象
+//背景
 var Background = (function(){
 	function obj(){
 	}
@@ -92,5 +94,14 @@ var Background = (function(){
 			}
 		}		
 	};
-	return obj;
+	var instance;
+	var _static = {
+		getInstance:function(){
+			if(instance === undefined){
+				instance = new obj();
+			}
+			return instance;
+		}
+	};
+	return _static;
 })();
